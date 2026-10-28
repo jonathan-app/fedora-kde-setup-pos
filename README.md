@@ -24,8 +24,8 @@ Script de automação para restaurar todo o ambiente de desenvolvimento, produti
 ### Opção 1: Clonando o repositório (Recomendado)
 
 ```bash
-git clone https://github.com/SEU-USUARIO/pos-install_fedora-kde.git
-cd pos-install_fedora-kde
+git clone https://github.com/jonathan-app/fedora-kde-setup-pos.git
+cd fedora-kde-setup-pos
 chmod +x post-install-fedora-kde.sh
 sudo ./post-install-fedora-kde.sh
 ```
