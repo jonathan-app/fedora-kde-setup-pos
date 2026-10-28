@@ -392,3 +392,4 @@ step "Finished"
 # -----------------------------------------------------------------------------
 echo "Full execution log saved at: $LOG_FILE"
 echo "A system reboot is recommended to fully apply services, fonts, and multimedia codecs."
+

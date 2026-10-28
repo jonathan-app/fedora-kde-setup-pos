@@ -1,6 +1,6 @@
-# Pós-Instalação Fedora KDE
+# Fedora KDE Post-Install
 
-Script de automação para restaurar todo o ambiente de desenvolvimento, produtividade e ferramentas de sistema após uma instalação limpa do **Fedora KDE Plasma**.
+Automation script to restore your entire development, productivity, and system tools environment after a clean installation of **Fedora KDE Plasma**.
 
 ![Fedora](https://img.shields.io/badge/Fedora-40%2B-blue?logo=fedora&logoColor=white)
 ![KDE Plasma](https://img.shields.io/badge/KDE-Plasma%206-1d99f3?logo=kde&logoColor=white)
@@ -9,135 +9,137 @@ Script de automação para restaurar todo o ambiente de desenvolvimento, produti
 
 ---
 
-## Destaques
+## Highlights
 
-- **Instalação Interativa 1 a 1**: cada aplicativo exibe seu nome e descrição detalhada, perguntando se você deseja instalá-lo (`[S/n]`).
-- **Idempotente**: pode ser executado múltiplas vezes sem conflitos ou sobrescritas indesejadas.
-- **Resiliente a erros**: valida cada pacote com `dnf repoquery` antes de instalar, evitando que um pacote ausente interrompa o processo.
-- **Registro completo de logs**: saída duplicada no terminal e gravada em `/var/log/post-install-fedora.log`.
-- **Separação de escopo**: o script cuida de repositórios, binários e serviços; dotfiles e chaves pessoais permanecem no controle do usuário.
+- **1-by-1 Interactive Installation**: each application displays its name and a detailed description, prompting you whether to install it (`[Y/n]`).
+- **Idempotent**: can be run multiple times without conflicts or unwanted overwrites.
+- **Error-resilient**: validates each package with `dnf repoquery` before installing, preventing a missing package from halting the process.
+- **Full logging**: output is mirrored to the terminal and saved to `/var/log/post-install-fedora.log`.
+- **Scope separation**: the script handles repositories, binaries, and services; dotfiles and personal keys remain under the user's control.
 
 ---
 
-## Instruções de Uso
+## Usage Instructions
 
-### Opção 1: Clonando o repositório (Recomendado)
+### Option 1: Cloning the repository (Recommended)
 
 ```bash
 git clone https://github.com/jonathan-app/fedora-kde-setup-pos.git
 cd fedora-kde-setup-pos
-chmod +x post-install-fedora-kde.sh post-install-fedora-kde-en.sh
-
-# Versão em Português:
-sudo ./post-install-fedora-kde.sh
+chmod +x post-install-fedora-kde-en.sh post-install-fedora-kde-br.sh
 
 # English version:
 sudo ./post-install-fedora-kde-en.sh
+
+# Versão em Português:
+sudo ./post-install-fedora-kde-br.sh
 ```
 
-### Opção 2: Criando o arquivo manualmente
+### Option 2: Creating the file manually
 
-1. Crie o arquivo do script no seu sistema:
+1. Create the script file on your system:
 ```bash
-nano post-install-fedora-kde.sh
+nano post-install-fedora-kde-en.sh
 ```
 
-2. Cole o conteúdo do script, salve (`Ctrl+O`, `Enter`) e saia (`Ctrl+X`).
+2. Paste the script content, save (`Ctrl+O`, `Enter`), and exit (`Ctrl+X`).
 
-3. Conceda permissão de execução:
+3. Grant execution permissions:
 ```bash
-chmod +x post-install-fedora-kde.sh
+chmod +x post-install-fedora-kde-en.sh
 ```
 
-4. Execute o script com privilégios administrativos:
+4. Run the script with administrative privileges:
 ```bash
-sudo ./post-install-fedora-kde.sh
+sudo ./post-install-fedora-kde-en.sh
 ```
 
-5. **Reinicie o sistema** ao término para garantir o carregamento correto de serviços em segundo plano, como `snapd`, fontes e recursos do shell.
+5. **Reboot the system** once finished to ensure background services like `snapd`, fonts, and shell resources load properly.
 
 ---
 
-## Etapas da Automação
+## Automation Steps
 
-1. **Atualização do Sistema**: sincronização e atualização completa de pacotes existentes via `dnf upgrade --refresh`.
-2. **RPM Fusion**: habilita os repositórios `free` e `nonfree` com codecs de áudio/vídeo (`gstreamer1-plugins-bad-freeworld`, `ugly`).
-3. **Repositórios de Terceiros**:
+1. **System Update**: full synchronization and update of existing packages via `dnf upgrade --refresh`.
+2. **RPM Fusion**: enables the `free` and `nonfree` repositories along with audio/video codecs (`gstreamer1-plugins-bad-freeworld`, `ugly`).
+3. **Third-Party Repositories**:
    - Adoptium (Eclipse Temurin JDK)
-   - Netdata (agente de telemetria)
+   - Netdata (telemetry agent)
    - Google Chrome & Microsoft Edge
    - Sublime Text
    - AnyDesk
    - Cloudflare WARP
-4. **Instalação de Pacotes RPM**: lote com compiladores, ferramentas dev, bancos de dados, utilitários de rede, fontes e clientes GUI.
-5. **Configuração de Flatpaks**: adiciona o remote oficial do Flathub e instala os navegadores e aplicativos de produtividade.
-6. **Habilitação de Serviços**: ativa `cockpit.socket`, `snapd.socket`, `dnf-automatic.timer`, `netdata` e `clamav-freshclam`.
-7. **Guia de Pacotes Manuais**: lista lembretes de softwares distribuídos exclusivamente via `.rpm` avulso.
+4. **RPM Package Installation**: batch containing compilers, dev tools, databases, network utilities, fonts, and GUI clients.
+5. **Flatpak Setup**: adds the official Flathub remote and installs browsers and productivity applications.
+6. **Service Activation**: enables `cockpit.socket`, `snapd.socket`, `dnf-automatic.timer`, `netdata`, and `clamav-freshclam`.
+7. **Manual Packages Guide**: lists reminders for software distributed exclusively via standalone `.rpm` files.
 
 ---
 
-## Softwares Instalados
+## Installed Software
 
-### Pacotes RPM (via DNF)
+### RPM Packages (via DNF)
 
-| Categoria | Pacotes |
+| Category | Packages |
 |---|---|
-| **Desenvolvimento** | `git`, `gcc`, `gcc-c++`, `make`, `cmake`, `rust`, `cargo`, `gh`, `nodejs22-npm-bin`, `uv`, `python3-devel`, `python3-pip`, `python3-virtualenv`, `python3-black`, `python3-flake8`, headers (`openssl`, `dbus`, `gtk-layer-shell`, `librsvg2`, `webkit2gtk4.1`, `libappindicator`), `patchelf` |
-| **Bancos & Serviços** | `postgresql`, `mariadb-server`, `sqlite`, `redis` (valkey), `netdata`, `clamav`, `snapd`, `cockpit` (bridge, networkmanager, storaged, system, ws), `dnf-automatic`, `openscap-scanner` |
-| **Contêineres** | `podman-compose`, `podman-docker` |
-| **Monitoramento & CLI** | `htop`, `fastfetch`, `btop`, `glances`, `atop`, `nmon`, `iptstate` |
-| **Rede & Diagnóstico** | `bind-utils`, `mtr`, `tcpdump`, `nmap-ncat`, `whois`, `traceroute`, `tree`, `dos2unix`, `minicom`, `lrzsz`, `net-tools` |
-| **Arquivos & Sistema** | `unrar`, `7zip`, `compsize`, `gocryptfs`, `cifs-utils`, `nfs-utils` |
-| **Shell & Fontes** | `zsh`, `powerline`, `powerline-fonts`, `neovim`, `wl-clipboard`, `aajohan-comfortaa-fonts` |
-| **Aplicações Desktop** | `telegram-desktop`, `kdenlive`, `sublime-text`, `deskflow`, `alacarte`, `anydesk`, `google-chrome-stable`, `microsoft-edge-stable`, `cloudflare-warp` |
-| **Multimídia & Java** | `vlc-plugin-gstreamer`, `gstreamer1-plugin-libav`, `faad2-libs`, `java-25-openjdk-headless`, `ffmpegthumbs` |
+| **Development** | `git`, `gcc`, `gcc-c++`, `make`, `cmake`, `rust`, `cargo`, `gh`, `nodejs22-npm-bin`, `uv`, `python3-devel`, `python3-pip`, `python3-virtualenv`, `python3-black`, `python3-flake8`, headers (`openssl`, `dbus`, `gtk-layer-shell`, `librsvg2`, `webkit2gtk4.1`, `libappindicator`), `patchelf` |
+| **Databases & Services** | `postgresql`, `mariadb-server`, `sqlite`, `redis` (valkey), `netdata`, `clamav`, `snapd`, `cockpit` (bridge, networkmanager, storaged, system, ws), `dnf-automatic`, `openscap-scanner` |
+| **Containers** | `podman-compose`, `podman-docker` |
+| **Monitoring & CLI** | `htop`, `fastfetch`, `btop`, `glances`, `atop`, `nmon`, `iptstate` |
+| **Network & Diagnostics** | `bind-utils`, `mtr`, `tcpdump`, `nmap-ncat`, `whois`, `traceroute`, `tree`, `dos2unix`, `minicom`, `lrzsz`, `net-tools` |
+| **Files & System** | `unrar`, `7zip`, `compsize`, `gocryptfs`, `cifs-utils`, `nfs-utils` |
+| **Shell & Fonts** | `zsh`, `powerline`, `powerline-fonts`, `neovim`, `wl-clipboard`, `aajohan-comfortaa-fonts` |
+| **Desktop Applications** | `telegram-desktop`, `kdenlive`, `sublime-text`, `deskflow`, `alacarte`, `anydesk`, `google-chrome-stable`, `microsoft-edge-stable`, `cloudflare-warp` |
+| **Multimedia & Java** | `vlc-plugin-gstreamer`, `gstreamer1-plugin-libav`, `faad2-libs`, `java-25-openjdk-headless`, `ffmpegthumbs` |
 
-### Aplicativos Flatpak (Flathub)
+### Flatpak Applications (Flathub)
 
-| Categoria | Identificador / App |
+| Category | Identifier / App |
 |---|---|
-| **Navegação & Comunicação** | Brave, Vivaldi, Telegram, Dropbox |
-| **Desenvolvimento & Banco** | GitKraken, GitHub Desktop, DBeaver Community, Kate |
-| **Design & Mídia** | Blender, Inkscape, OBS Studio, VLC, Video Downloader |
-| **Produtividade & Notas** | Obsidian, KeePassXC, qBittorrent, KStars, Yakuake, Flatseal |
-| **Criativo / IA** | Artcraft Launcher, Vectorcraft |
+| **Browsing & Communication** | Brave, Vivaldi, Telegram, Dropbox |
+| **Development & Database** | GitKraken, GitHub Desktop, DBeaver Community, Kate |
+| **Design & Media** | Blender, Inkscape, OBS Studio, VLC, Video Downloader |
+| **Productivity & Notes** | Obsidian, KeePassXC, qBittorrent, KStars, Yakuake, Flatseal |
+| **Creative / AI** | Artcraft Launcher, Vectorcraft |
 
-### Pacotes Manuais (Sem repositório estável)
+### Manual Packages (No stable repository)
 
-Baixe os pacotes `.rpm` dos respectivos fornecedores e instale com `sudo dnf install ./nome-do-arquivo.rpm`:
+Download the `.rpm` packages from their respective vendors and install them with `sudo dnf install ./filename.rpm`:
 
-- `chatgpt` (cliente oficial desktop OpenAI)
-- `opencode` (AI desktop com auto-updater)
-- `pihole-meta` (metapackage local customizado)
-- `slitherer`
+- `chatgpt` (official OpenAI desktop client)
+- `opencode` (AI desktop with auto-updater)
+- `pihole-meta` (custom local metapackage)
+- `slitherer` (game)
 
 ---
 
-## Passos Manuais Pós-Script
+## Post-Script Manual Steps
 
-Algumas alterações devem ser feitas com o usuário não-root após a reinicialização:
+Some changes must be performed as a non-root user after rebooting:
 
 ```bash
-# Definir Zsh como shell padrão para o seu usuário:
+# Set Zsh as the default shell for your user:
 chsh -s /usr/bin/zsh
 
-# (Opcional) Inicializar serviços de banco de dados se for utilizá-los localmente:
+# (Optional) Start database services if you plan to use them locally:
 sudo systemctl enable --now postgresql mariadb
 ```
 
 ---
 
-## Estrutura do Repositório
+## Repository Structure
 
 ```text
-pos-install_fedora-kde/
-├── post-install-fedora-kde.sh   # Script bash principal
-├── README.md                    # Documentação do projeto
-└── dotfiles/                    # (Opcional) Guarde suas configs (~/.zshrc, ~/.config)
+fedora-kde-setup-pos/
+├── post-install-fedora-kde-en.sh   # English installation script
+├── post-install-fedora-kde-br.sh   # Portuguese installation script
+├── .gitignore                      # Git ignore file
+├── LICENSE                         # MIT License
+└── README.md                       # Project documentation
 ```
 
 ---
 
-## Licença
+## License
 
-Distribuído sob a licença [MIT](LICENSE). Sinta-se livre para clonar, adaptar para seu fluxo e compartilhar.
+Distributed under the [MIT](LICENSE) License. Feel free to clone, adapt to your workflow, and share.
